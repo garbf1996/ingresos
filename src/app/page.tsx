@@ -1,66 +1,124 @@
 "use client";
+import ingreso from './img/OIG1.jpeg';
+import registro from './img/OIG1 (1).jpeg';
+import Image from 'next/image';
+import useToggleForm from './hook/ToggleForm';
 import { useState } from 'react';
 
-export default function Home() {
-  const [isSignIn, setIsSignIn] = useState(true);
- console.log()
-  const toggleForm = () => {
-    setIsSignIn(!isSignIn);
-  
+export default function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
+  const [isSignIn, toggleForm] = useToggleForm();
+
+  const handleSignIn = (event:any) => {
+    event.preventDefault();
+    // Add sign-in logic here
+  };
+
+  const handleSignUp = (event:any) => {
+    event.preventDefault();
+    // Add sign-up logic here
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 px-6">
-      <div>
-        <h1 className="mt-2 text-center text-3xl leading-3">
-          {isSignIn ? 'Iniciar Sesión' : 'Crear Cuenta'}
-        </h1>
-      </div>
-      <div className="bg-slate-700 mt-4 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-black py-8 px-4 shadow sm:rounded-lg sm:px-10">
+    <div className="min-h-screen flex items-center justify-center bg-gray-200">
+      <div className="bg-white rounded-lg shadow-lg flex">
+        <div className="p-8 w-96">
+          <h2 className="text-3xl font-bold mb-4">
+            {isSignIn ? 'Login' : 'Register'}
+          </h2>
+          <p className="mb-4 text-center justify-center">
+            {isSignIn
+              ? <h1 className='text-2xl font-bold text-gray-500 mb-4'>
+                Inciar sesión
+              </h1>
+              : <h1 className='text-2xl font-bold text-gray-500 mb-4'>
+                Registrarse
+                </h1>}
+          </p>
+          <form onSubmit={isSignIn ? handleSignIn : handleSignUp}>
+            <div className="mb-4">
+              <label htmlFor="email" className="block text-gray-700">
+                Correo
+              </label>
+              <input 
+                type="email" 
+                id="email" 
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)} 
+                className="w-full px-3 py-2 border rounded-lg" 
+                required 
+              />
+            </div>
+            {!isSignIn && (
+              <div className="mb-4">
+                <label htmlFor="username" className="block text-gray-700">Username</label>
+                <input 
+                  type="text" 
+                  id="username" 
+                  value={username} 
+                  onChange={(e) => setUsername(e.target.value)} 
+                  className="w-full px-3 py-2 border rounded-lg" 
+                  required 
+                />
+              </div>
+            )}
+            <div className="mb-6">
+              <label htmlFor="password" className="block text-gray-700">
+                Contraseña
+              </label>
+              <input 
+                type="password" 
+                id="password" 
+                value={password} 
+                onChange={(e) => setPassword(e.target.value)} 
+                className="w-full px-3 py-2 border rounded-lg" 
+                required 
+              />
+            </div>
+            <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded-lg">
+              {isSignIn ? 'Login' : 'Register'}
+            </button>
+          </form>
           {isSignIn ? (
-            <form>
-              <div className="mb-4">
-                <label htmlFor="email" className="block text-white text-sm font-medium mb-2">Email</label>
-                <input type="email" name="email" id="email" className="bg-black border-2 border-gray-600 rounded w-full py-2 px-3 text-white" />
+            <>  
+              <div className="mt-4 text-center">
+                <a href="#" className="text-blue-500">Forget password?</a>
               </div>
-              <div className="mb-6">
-                <label htmlFor="password" className="block text-white text-sm font-medium mb-2">Password</label>
-                <input type="password" name="password" id="password" className="bg-black border-2 border-gray-600 rounded w-full py-2 px-3 text-white" />
+              <div className="mt-4 text-center">
+                <span className='text-blue-500'>Si no tienes una cuenta...</span>
+                <button onClick={toggleForm} className="ml-2 text-blue-500">Register</button>
               </div>
-              <button type="submit" className="bg-blue-500 text-white font-semibold py-2 px-4 rounded w-full">Sign In</button>
-              <div className="flex justify-end mt-5">
-                <button type="button" onClick={toggleForm} className="relative h-12 w-40 overflow-hidden border border-blue-500 text-blue-500 shadow-2xl transition-all before:absolute before:top-1/2 before:h-0 before:w-64 before:origin-center before:-translate-x-20 before:rotate-45 before:duration-300 hover:text-white hover:shadow-blue-500 hover:before:h-64 hover:before:-translate-y-32">
-                  Crea una cuenta
-                </button>
-              </div>
-            </form>
+            </>
           ) : (
-            <form>
-              <div className="mb-4">
-                <label htmlFor="email" className="block text-white text-sm font-medium mb-2">Email</label>
-                <input type="email" name="email" id="email" className="bg-black border-2 border-gray-600 rounded w-full py-2 px-3 text-white" />
-              </div>
-              <div className="mb-4">
-                <label htmlFor="username" className="block text-white text-sm font-medium mb-2">Username</label>
-                <input type="text" name="username" id="username" className="bg-black border-2 border-gray-600 rounded w-full py-2 px-3 text-white" />
-              </div>
-              <div className="mb-6">
-                <label htmlFor="password" className="block text-white text-sm font-medium mb-2">Password</label>
-                <input type="password" name="password" id="password" className="bg-black border-2 border-gray-600 rounded w-full py-2 px-3 text-white" />
-              </div>
-              <button type="submit" className="bg-blue-500 text-white font-semibold py-2 px-4 rounded w-full">Crear Cuenta</button>
-              <div className="flex justify-end mt-5">
-                <button type="button" onClick={toggleForm} className="relative h-12 w-40 overflow-hidden border border-blue-500 text-blue-500 shadow-2xl transition-all before:absolute before:top-1/2 before:h-0 before:w-64 before:origin-center before:-translate-x-20 before:rotate-45 before:duration-300 hover:text-white hover:shadow-blue-500 hover:before:h-64 hover:before:-translate-y-32">
-                  Iniciar Sesión
-                </button>
-              </div>
-            </form>
+            <div className="mt-4 text-center">
+              <span className='text-blue-500'>¿Ya tienes una cuenta?</span>
+              <button onClick={toggleForm} className="ml-2 text-blue-500">Inciar sesión</button>
+            </div>
+          )}
+        </div>
+        <div className="relative w-96">
+          {isSignIn ? (
+            <Image 
+              src={ingreso}
+              alt="Orange slices with ice" 
+              layout="fill" 
+              objectFit="cover" 
+              className="rounded-r-lg w-96"
+            />
+          ) : (
+            <Image 
+              src={registro}
+              alt="Another image" 
+              layout="fill" 
+              objectFit="cover" 
+              className="rounded-r-lg"
+            />
           )}
         </div>
       </div>
     </div>
   );
 }
-
 
