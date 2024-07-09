@@ -4,23 +4,37 @@ import registro from './img/OIG1 (1).jpeg';
 import Image from 'next/image';
 import useToggleForm from './hook/ToggleForm';
 import { useState } from 'react';
+import { supabase } from "./utils/supabase/client";
+import { useRouter } from 'next/navigation'
+
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
   const [isSignIn, toggleForm] = useToggleForm();
-
-  const handleSignIn = (event:any) => {
+  const router = useRouter();
+  const handleSignIn = async  (event:any) => {
     event.preventDefault();
-    // Add sign-in logic here
+    const resutado = await supabase.auth.signInWithPassword({
+      email: email,
+      password: password
+    })
+    if (resutado.error) {
+      alert(resutado.error.message);
+    } else if (resutado.data) {
+    
+      router.push('/dashboard'); 
+   
+    }
+
   };
 
   const handleSignUp = (event:any) => {
     event.preventDefault();
     // Add sign-up logic here
   };
-
+ 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-200">
       <div className="bg-white rounded-lg shadow-lg flex">
@@ -28,15 +42,15 @@ export default function Login() {
           <h2 className="text-3xl font-bold mb-4">
             {isSignIn ? 'Login' : 'Register'}
           </h2>
-          <p className="mb-4 text-center justify-center">
+         
             {isSignIn
-              ? <h1 className='text-2xl font-bold text-gray-500 mb-4'>
+              ? <h1 className=' justify-center text-center text-2xl font-bold text-gray-500 mb-4'>
                 Inciar sesión
               </h1>
-              : <h1 className='text-2xl font-bold text-gray-500 mb-4'>
+              : <h1 className=' justify-center text-center text-2xl font-bold text-gray-500 mb-4'>
                 Registrarse
                 </h1>}
-          </p>
+   
           <form onSubmit={isSignIn ? handleSignIn : handleSignUp}>
             <div className="mb-4">
               <label htmlFor="email" className="block text-gray-700">
@@ -47,7 +61,7 @@ export default function Login() {
                 id="email" 
                 value={email} 
                 onChange={(e) => setEmail(e.target.value)} 
-                className="w-full px-3 py-2 border rounded-lg" 
+                className="w-full text-black px-3 py-2 border rounded-lg" 
                 required 
               />
             </div>
@@ -59,7 +73,7 @@ export default function Login() {
                   id="username" 
                   value={username} 
                   onChange={(e) => setUsername(e.target.value)} 
-                  className="w-full px-3 py-2 border rounded-lg" 
+                  className="w-full text-black  px-3 py-2 border rounded-lg" 
                   required 
                 />
               </div>
@@ -73,11 +87,11 @@ export default function Login() {
                 id="password" 
                 value={password} 
                 onChange={(e) => setPassword(e.target.value)} 
-                className="w-full px-3 py-2 border rounded-lg" 
+                className="w-full text-black  px-3 py-2 border rounded-lg" 
                 required 
               />
             </div>
-            <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded-lg">
+            <button  type="submit" className="w-full bg-blue-500 text-white py-2 rounded-lg">
               {isSignIn ? 'Login' : 'Register'}
             </button>
           </form>
